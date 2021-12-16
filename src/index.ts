@@ -1,8 +1,7 @@
 import Stream from "stream";
-import fs from 'fs'
 import * as turf from '@turf/turf'
 
-export class GeoBrickStream extends Stream.Readable {
+export class AnyMesh extends Stream.Readable {
   private geojson: GeoJSON.FeatureCollection
   private left: number
   private right: number
@@ -12,7 +11,7 @@ export class GeoBrickStream extends Stream.Readable {
   private y: number
   private width: number
   private height: number
-  private brickGenerator: Generator<GeoJSON.Feature>
+  private meshGenerator: Generator<GeoJSON.Feature>
 
   constructor(geojson: GeoJSON.FeatureCollection, x: number, y: number) {
     super({ objectMode: true })
@@ -26,18 +25,17 @@ export class GeoBrickStream extends Stream.Readable {
     this.y = y
     this.width = (right - left) / this.x
     this.height = (top - bottom) / this.y
-    this.brickGenerator = this.getBrick()
+    this.meshGenerator = this.getMesh()
   }
 
-  *getBrick() {
+  *getMesh() {
     for (let dy = 0; dy < this.y; dy++) {
       for (let dx = 0; dx < this.x; dx++) {
-        console.warn({dx, dy})
         const left = this.left + dx * this.width
         const right = left + this.width
         const bottom = this.bottom + dy * this.height
         const top = bottom + this.height
-        const brick: GeoJSON.Feature = {
+        const mesh: GeoJSON.Feature = {
           type: 'Feature',
           properties: { top, bottom, left, right },
           geometry: {
@@ -51,17 +49,18 @@ export class GeoBrickStream extends Stream.Readable {
             ]]
           }
         }
+
         // @ts-ignore
-        const intersection = this.geojson.features.some(feature => turf.booleanIntersects(feature, brick))
+        const intersection = this.geojson.features.some(feature => turf.booleanIntersects(feature, mesh))
         if(intersection) {
-          yield brick
+          yield mesh
         }
       }
     }
   }
 
   _read() {
-    const { value, done } = this.brickGenerator.next()
+    const { value, done } = this.meshGenerator.next()
     this.push( done ? null : value)
   }
 }

@@ -1,19 +1,23 @@
 {
-  "name": "geobrick",
+  "name": "anymesh",
+  "description": "a GeoJSON slicing library with any resolutions",
   "version": "1.0.0",
   "bin": "dist/cli.js",
   "main": "dist/index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "test": "ts-node src/index.test.ts"
+  },
   "devDependencies": {
     "@types/geojson": "^7946.0.8",
-    "@types/yargs": "^17.0.7",
+    "@types/node": "^16.11.13",
+    "isomorphic-unfetch": "^3.1.0",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@turf/turf": "^6.5.0",
-    "@types/node": "^16.11.12",
-    "turf-polygon": "^1.0.3",
-    "yargs": "^17.3.0"
+    "@turf/turf": "^6.5.0"
   }
 }
