@@ -61,6 +61,17 @@ export class Anymesh extends Stream.Readable {
     return;
   }
 
+  async bulk() {
+    const result: GeoJSON.FeatureCollection = {
+      type: 'FeatureCollection',
+      features: []
+    }
+    for await (const mesh of this.meshGenerator) {
+      result.features.push(mesh)
+    }
+    return result
+  }
+
   _read() {
     const { value, done } = this.meshGenerator.next()
     this.push( done ? null : value)

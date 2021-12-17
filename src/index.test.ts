@@ -35,6 +35,10 @@ const main = async () => {
     assert.deepEqual(mesh, features[index])
     index++
   }
+
+  // bulk test
+  const featureCollecition = await new Anymesh(geojson, 3, 3).bulk()
+  assert.deepEqual(featureCollecition.features, features)
 }
 
 main()
