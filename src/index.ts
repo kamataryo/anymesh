@@ -1,7 +1,8 @@
 import Stream from "stream";
 import * as turf from '@turf/turf'
 
-export class AnyMesh extends Stream.Readable {
+export class Anymesh extends Stream.Readable {
+
   private geojson: GeoJSON.FeatureCollection
   private left: number
   private right: number
@@ -25,10 +26,10 @@ export class AnyMesh extends Stream.Readable {
     this.y = y
     this.width = (right - left) / this.x
     this.height = (top - bottom) / this.y
-    this.meshGenerator = this.getMesh()
+    this.meshGenerator = this.iterateMesh()
   }
 
-  *getMesh() {
+  private *iterateMesh() {
     for (let dy = 0; dy < this.y; dy++) {
       for (let dx = 0; dx < this.x; dx++) {
         const left = this.left + dx * this.width
@@ -57,6 +58,7 @@ export class AnyMesh extends Stream.Readable {
         }
       }
     }
+    return;
   }
 
   _read() {
