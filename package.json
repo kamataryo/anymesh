@@ -1,7 +1,7 @@
 {
   "name": "anymesh",
   "description": "a GeoJSON slicing library with any resolutions",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "bin": "dist/cli.js",
   "main": "dist/index.js",
   "license": "MIT",
